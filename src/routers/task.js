@@ -37,6 +37,13 @@ router.get('/tasks', auth, async (req, res) => {
         const parts = req.query.sortBy.split(':');
         sort[parts[0]] = (parts[1] === 'desc') ? -1 : 1;
     }
+    if (!req.query.skip || parseInt(req.query.skip) < 0) {
+        req.query.skip = '0';
+    }
+
+    if (!req.query.limit || parseInt(req.query.limit) < 0) {
+        req.query.limit = '1000000000';
+    }
 
     try {
         await req.user.populate({
